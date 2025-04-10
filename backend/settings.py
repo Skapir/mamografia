@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-+(=+g3#%)w^gb8re0%hh2^r&*i9vlgoo9&d31vd(sm)07v@w4=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mamografia-production.up.railway.app']
 
 
 # Application definition
