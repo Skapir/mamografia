@@ -14,7 +14,9 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.urls import reverse
-import time
+from xhtml2pdf import pisa
+from io import BytesIO
+from django.template.loader import get_template
 
 def listado_programacion(request):
     usuario = request.user
@@ -309,21 +311,26 @@ def get_client_ip(request):
 @login_required
 def generar_ticket_pdf(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
-
+    
     try:
         paciente = Paciente.objects.get(HI_NDOCUM=cita.dni_paciente)
     except Paciente.DoesNotExist:
-        paciente = None  # fallback
+        paciente = None
 
     context = {
         "cita": cita,
         "paciente": paciente,
     }
 
-    html = render_to_string("ticket_cita.html", context)
+    template = get_template("ticket_cita.html")
+    html = template.render(context)
 
-    pdf_file = HTML(string=html).write_pdf()
+    result = BytesIO()
+    pdf = pisa.CreatePDF(html, dest=result)
 
-    response = HttpResponse(pdf_file, content_type="application/pdf")
+    if pdf.err:
+        return HttpResponse("Error al generar el PDF", status=500)
+
+    response = HttpResponse(result.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = f"inline; filename=ticket-cita-{cita_id}.pdf"
     return response
