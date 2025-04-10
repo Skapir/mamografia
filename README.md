@@ -36,6 +36,7 @@ Este sistema fue desarrollado como solución para **mejorar la programación y a
 git clone https://github.com/Skapir/mamografia.git
 cd mamografia
 ```
+<<<<<<< Updated upstream
 2. Crea y activa tu entorno virtual:
 
 python -m venv venv
@@ -76,3 +77,5 @@ MIT License — libre para usar y modificar con atribución.
 Dale una ⭐ al repositorio o contáctame para colaborar en proyectos de salud digital 👨‍⚕️🚀
 
 ¿Te gustaría que ahora lo subamos a GitHub con un commit desde VSCode o terminal? ¿O ya quieres ver cómo se ve desde la web?
+=======
+>>>>>>> Stashed changes
