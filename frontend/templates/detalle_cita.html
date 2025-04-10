@@ -1,0 +1,117 @@
+<!-- ✅ MODAL DETALLE CITA -->
+<div id="modal_detalle_cita" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/20 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-7xl h-5/6 overflow-y-auto">
+    <div class="p-6">
+      <form method="POST" action="{% url 'busqueda_paciente' %}">
+        {% csrf_token %}
+        <h2 class="text-xl font-semibold text-gray-900 text-center mb-6">Detalle de Cita</h2>
+
+        <!-- Filtros -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label for="centro" class="block text-sm font-medium text-gray-900">Hospital Principal:</label>
+            <select name="centro" id="centro"
+              class="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="">Seleccione</option>
+              {% for centro in centros_principales %}
+              <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div>
+            <label for="turno" class="block text-sm font-medium text-gray-900">Turno:</label>
+            <select name="turno" id="turno"
+              class="mt-1 w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option value="">Todos</option>
+              <option value="Mañana">Mañana</option>
+              <option value="Tarde">Tarde</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button type="submit"
+            class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white font-semibold shadow-sm hover:bg-blue-500">
+            Buscar
+          </button>
+        </div>
+      </form>
+
+      <!-- 🗂️ Tabla Resultados -->
+      <div class="mt-8 overflow-x-auto border border-gray-200 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
+          <thead class="bg-gray-50 font-semibold text-gray-800">
+            <tr>
+              <th class="px-4 py-3">CENTRO</th>
+              <th class="px-4 py-3">PROFESIONAL</th>
+              <th class="px-4 py-3">FECHA</th>
+              <th class="px-4 py-3">CUPOS</th>
+              <th class="px-4 py-3">TURNO</th>
+              <th class="px-4 py-3">OPCIONES</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% if cupos %}
+            {% for cupo in cupos %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3">{{ cupo.medico.centro.nombre }}</td>
+              <td class="px-4 py-3">{{ cupo.medico.nombre }}</td>
+              <td class="px-4 py-3">{{ cupo.fecha|date:"d/m/Y" }}</td>
+              <td class="px-4 py-3">{{ cupo.cantidad_disponible }}</td>
+              <td class="px-4 py-3">{{ cupo.turno }}</td>
+              <td class="px-4 py-3">
+                <button
+                  class="inline-block rounded bg-green-600 px-3 py-1 text-white text-sm hover:bg-green-500 transition"
+                  onclick="abrirModalCita('{{ cupo.id }}', '{{ paciente.HI_NDOCUM }}', '{{ cupo.medico.nombre }}', '{{ cupo.fecha|date:"d/m/Y" }}', '{{ cupo.medico.centro.nombre }}')">
+                  Grabar
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-gray-500 py-4">No se encontraron programaciones.</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+            <div class="text-center">
+              <p class="mt-2 text-sm text-red-700" id="email-description">Presiona ESC para salir del formulario</p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ SCRIPT -->
+<script>
+
+//ESC para cerrar el modal
+document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("modal_detalle_cita");
+
+        // ESC para cerrar el modal
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                cerrarModalDetalleCita();
+            }
+        });
+    });
+
+  function abrirModalDetalleCita() {
+    const modal = document.getElementById("modal_detalle_cita");
+    if (modal.classList.contains("hidden")) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+}
+
+  function cerrarModalDetalleCita() {
+    const modal = document.getElementById("modal_detalle_cita");
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+    
+  
+  }
+</script>

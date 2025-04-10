@@ -1,0 +1,125 @@
+<!-- MODAL -->
+<dialog id="my_modal_3" class="modal">
+    <div class="modal-box">
+        <form method="POST" action="{% url 'guardar_programacion' %}">
+            {% csrf_token %}
+            <div class="space-y-12 mt-6">
+                <div class="border-gray-900/10 pb-12">
+                    <h2 class="text-xl font-semibold text-gray-900 text-center">Registrar Programación</h2>
+
+                    <!-- 🚀 ALERTA SOLO EN EL MODAL -->
+                    {% if request.session.error_msg %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" id="alerta-error">
+                            <p class="text-sm">{{ request.session.error_msg }}</p>
+                        </div>
+                        <script>
+                            // 🕒 Ocultar el mensaje de error después de 5 segundos
+                            setTimeout(function () {
+                                let alerta = document.getElementById("alerta-error");
+                                if (alerta) {
+                                    alerta.style.display = "none";
+                                }
+                            }, 9000);
+                        </script>
+                    {% endif %}
+                    
+
+                    <!-- Profesional Médico -->
+                    <div class="sm:col-span-3 mt-6">
+                        <label for="medico" class="block text-sm font-medium text-gray-900">Profesional Médico</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="medico" name="medico" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" required>
+                                <option value="">Seleccione Médico</option>
+                                  {% for medico in medicos %}
+                                    <option value="{{ medico.id }}">{{ medico.nombre }}</option>
+                                  {% endfor %}
+                            </select>
+                        </div>
+                      </div>
+
+                    <!-- Centro Secundario -->
+                    <div class="sm:col-span-3 mt-6">
+                        <label for="centro" class="block text-sm font-medium text-gray-900">Centro Secundario</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="centro" name="centro" class="w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" required>
+                              <option value="">Seleccione Centro</option>
+                              {% for centro in centros_secundarios %}
+                                  <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Fecha -->
+                    <div class="sm:col-span-3 mt-6">
+                        <label for="fecha" class="block text-sm font-medium text-gray-900">Fecha</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <input type="date" name="fecha" id="fecha" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" required>
+                        </div>
+                    </div>
+
+                    <!-- Cupos -->
+                    <div class="sm:col-span-3 mt-6">
+                        <label for="cupos" class="block text-sm font-medium text-gray-900">Cupos</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <input type="number" name="cupos" id="cupos" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" placeholder="Ingresar Cantidad de Cupos" required>
+                        </div>
+                    </div>
+
+                    <!-- Turno -->
+                    <div class="sm:col-span-3 mt-6">
+                        <label for="turno" class="block text-sm font-medium text-gray-900">Turno</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="turno" name="turno" class="w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" required>
+                                <option value="">Seleccione Turno</option>
+                                <option value="Mañana">Mañana</option>
+                                <option value="Tarde">Tarde</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex items-center justify-end gap-x-6">
+                <button type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus:outline-2 focus:outline-blue-600">GRABAR</button>
+            </div>
+            <div class="text-center">
+              <p class="mt-2 text-sm text-gray-500" id="email-description">Presiona ESC para salir del formulario</p>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // ESTE SCRIPT ES PARA ABRIR EL MODAL Y SI SALGO CON ESC SE BORRA LOS DATOS QUE SELECCIONÉ
+        const modal = document.getElementById("my_modal_3");
+        const form = modal.querySelector("form");
+
+        {% if request.session.open_modal %}
+            my_modal_3.showModal();  // ⚡ Abre el modal si hay error
+            
+            // 🗑️ Limpiar la variable de sesión después de usarla
+            fetch("{% url 'limpiar_session' %}");
+        {% endif %}
+
+        // 🧹 Limpiar el formulario cuando se cierre el modal
+        modal.addEventListener("close", function () {
+            form.reset(); // Restablece los valores del formulario
+        });
+
+
+        // ESTE SCRIPT ES DE LAS FECHAS CODIGO PARA EL CALENDARIO
+
+        let today = new Date();
+        // Ajustar el desfase horario para evitar errores con UTC
+        today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+
+         // Formatear correctamente a YYYY-MM-DD
+        let formattedDate = today.toISOString().split('T')[0];
+
+        // Establecer la fecha mínima
+        document.getElementById("fecha").setAttribute("min", formattedDate);
+
+        
+    });
+</script>

@@ -1,0 +1,51 @@
+<fieldset class="w-full bg-white border border-gray-300 p-6 rounded-lg shadow-md">
+    <legend class="px-3 text-lg font-bold text-gray-900 uppercase">Detalle del Paciente</legend>
+    {% if paciente %}
+    <div class="mt-4">
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <!-- Paciente -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">PACIENTE</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_NOMBRE }}</dd>
+            </div>
+            <!-- DNI -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">DNI</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_NDOCUM }}</dd>
+            </div>
+            <!-- Dirección -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">DIRECCIÓN</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_DIRECC }}</dd>
+            </div>
+            <!-- Teléfono -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">TELÉFONO</dt>
+                <dd class="text-sm text-gray-900"></dd>
+            </div>
+            <!-- Edad -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">EDAD</dt>
+                <dd class="text-sm text-gray-900"> {{ paciente.edad_completa }}</dd>
+            </div>
+            <!-- Autogenerado -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">AUTOGENERADO</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_AUTASE }}</dd>
+            </div>
+            <!-- Historia Clínica -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">HISTORIA CLÍNICA</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_NREG }}</dd>
+            </div>
+            <!-- Edad -->
+            <div class="border-b border-gray-200 pb-2">
+                <dt class="text-sm font-semibold text-gray-700">CENTRO ATENCION</dt>
+                <dd class="text-sm text-gray-900">{{ paciente.HI_CPOLIC }}</dd>
+            </div>
+        </dl>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500 mt-4">No se encontró información para el DNI ingresado.</p>
+    {% endif %}
+</fieldset>

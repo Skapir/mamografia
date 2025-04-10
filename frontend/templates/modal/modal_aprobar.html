@@ -1,0 +1,64 @@
+<dialog id="modalAprobar" class="modal">
+    <div class="modal-box">
+        <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100">
+            <svg class="size-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 text-center">Confirmar Aprobación</h3>
+        <p class="mt-2 text-sm text-gray-500 text-center">
+            ¿Está seguro de aprobar la programación del Dr. <span id="medicoNombre" class="font-semibold"></span> 
+            para el <span id="fechaProgramacion" class="font-semibold"></span> en el turno 
+            <span id="turnoProgramacion" class="font-semibold"></span>?
+        </p>
+
+        <div class="mt-5 flex justify-end space-x-3">
+            <button type="button" class="rounded-md bg-gray-300 px-3 py-2 text-sm text-gray-900 hover:bg-gray-400" onclick="modalAprobar.close()">Cancelar</button>
+            <button id="btnConfirmarAprobacion" type="button" class="rounded-md bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-500">Aprobar</button>
+        </div>
+    </div>
+</dialog>
+
+
+
+<script>
+
+    //MODAL DE APROBAR 
+     document.addEventListener("DOMContentLoaded", function () {
+        const aprobarLinks = document.querySelectorAll(".aprobar-btn");
+        const modalAprobar = document.getElementById("modalAprobar");
+        const btnConfirmarAprobacion = document.getElementById("btnConfirmarAprobacion");
+
+        let programacionId = null;
+
+        aprobarLinks.forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();  // Evitar que se recargue la página
+                programacionId = this.getAttribute("data-id");
+                document.getElementById("medicoNombre").textContent = this.getAttribute("data-medico");
+                document.getElementById("fechaProgramacion").textContent = this.getAttribute("data-fecha");
+                document.getElementById("turnoProgramacion").textContent = this.getAttribute("data-turno");
+
+                modalAprobar.showModal();
+            });
+        });
+
+        btnConfirmarAprobacion.addEventListener("click", function () {
+            if (programacionId) {
+                fetch(`/aprobar-programacion/${programacionId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();  // Recargar la página para ver los cambios
+                    } else {
+                        alert("Hubo un error al aprobar la programación.");
+                    }
+                });
+            }
+        });
+    });
+</script>

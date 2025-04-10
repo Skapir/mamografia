@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket de Cita</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            padding: 10px;
+            max-width: 300px;
+            margin: auto;
+            color: #000;
+        }
+        h2, h3 {
+            text-align: center;
+            margin: 4px 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 6px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            padding-bottom: 6px; /* 👈 Espaciado entre filas */
+        }
+        td.label {
+            font-weight: bold;
+            vertical-align: top;
+            width: 90px;
+            padding-right: 5px;
+        }
+        td.value {
+            vertical-align: top;
+            word-break: break-word;
+        }
+        .footer {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 11px;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>ESSALUD</h2>
+    <h3>Ticket de Cita - Mamografía</h3>
+    <hr>
+
+    <table>
+        <tr>
+            <td class="label">Paciente:</td>
+            <td class="value">{{ paciente.HI_NOMBRE }}</td>
+        </tr>
+        <tr>
+            <td class="label">DNI:</td>
+            <td class="value">{{ cita.dni_paciente }}</td>
+        </tr>
+    </table>
+    <hr>
+
+    <table>
+        <tr>
+            <td class="label">Hospital Atenderse:</td>
+            <td class="value">{{ cita.cupo.medico.centro.nombre }}</td>
+        </tr>
+        <tr>
+            <td class="label">Dirección:</td>
+            <td class="value">{{ cita.cupo.medico.centro.direccion }}</td>
+        </tr>
+        <tr>
+            <td class="label">Fecha:</td>
+            <td class="value">{{ cita.cupo.fecha|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Turno:</td>
+            <td class="value">
+                {{ cita.cupo.turno }} 
+                {% if cita.cupo.turno == "Mañana" %}(07:00 - 12:00){% else %}(13:00 - 18:00){% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Médico:</td>
+            <td class="value">{{ cita.cupo.medico.nombre }}</td>
+        </tr>
+        <tr>
+            <td class="label">Solicitud:</td>
+            <td class="value">{{ cita.numero_solicitud }}</td>
+        </tr>
+    </table>
+    <hr>
+
+    <table>
+        <tr>
+            <td class="label">Registrado por:</td>
+            <td class="value">{{ cita.usuario_registro.personal.nombre }}</td>
+        </tr>
+        <tr>
+            <td class="label">Fecha Reg. :</td>
+            <td class="value">{{ cita.fecha_registro|date:"d/m/Y H:i" }}</td>
+        </tr>
+    </table>
+    <hr>
+
+    <div class="footer">
+        <p>¡Cuídate para vivir!</p>
+        <p>Hazte papanicolaou</p>
+        <p>Y no olvides recoger tu resultado</p>
+    </div>
+</body>
+</html>

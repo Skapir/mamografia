@@ -1,0 +1,98 @@
+<fieldset class="w-full bg-white border border-gray-300 p-6 rounded-lg shadow-md">
+  <legend class="px-3 text-lg font-bold text-gray-900 uppercase">Historial de Citas</legend>
+
+    {% if paciente %}
+    <div class="mt-4 space-y-4">
+
+        <!-- 🔹 Botón para Nueva Cita -->
+        <div class="flex justify-end">
+        <button type="button" onclick="abrirModalDetalleCita()" 
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Nuevo
+        </button>
+        </div>
+
+        <!-- 🗂️ Tabla Historial -->
+        <div class="overflow-x-auto border border-gray-300 rounded-md shadow-sm mt-6">
+        <table id="tabla-historial" class="min-w-full border-separate border-spacing-0 divide-y divide-gray-300">
+            <thead class="bg-gray-100 text-xs sm:text-sm">
+            <tr class="divide-x divide-gray-200">
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900 ">HOSPITAL</th>
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900">FECHA ATENCIÓN</th>
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900">TURNO</th>
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900">Nº SOLICITUD</th>
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900">ATENDIDO?</th>
+                <th class="whitespace-nowrap py-3 px-4 text-center text-sm font-semibold text-gray-900">OPCIONES</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Aquí se llena dinámicamente -->
+            <tbody>
+                {% for cita in citas %}
+                <tr class="hover:bg-gray-100 divide-x divide-gray-200" >
+                    <td class="border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">{{ cita.cupo.medico.centro.nombre|upper }}</td> <!-- Hospital -->
+                    <td class="border-b border-gray-200 py-3 px-4 text-sm text-gray-700 text-center">{{ cita.cupo.fecha|date:"d/m/Y" }}</td>  <!-- Fecha atención -->
+                    <td class="border-b border-gray-200 py-3 px-4 text-sm text-gray-700 text-center">{{ cita.cupo.turno }}</td>    <!-- Turno (si usas choices) -->
+                    <td class="border-b border-gray-200 py-3 px-4 text-sm text-gray-700 text-center">{{ cita.numero_solicitud }}</td>
+                    <td class="border-b border-gray-200 py-3 px-4 text-sm text-gray-700 text-center">
+                        {% if cita.atendido %}
+                            <span class="inline-block rounded-md border border-green-400 px-3 py-1 text-xs font-semibold text-green-600 bg-green-50">
+                            SÍ
+                            </span>
+                        {% else %}
+                            <span class="inline-block rounded-md border border-red-400 px-3 py-1 text-xs font-semibold text-red-600 bg-red-50">
+                            NO
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="border-b border-gray-200 py-3 px-4 text-sm text-gray-700 text-center">
+                    <!-- Botón Editar -->
+                    <button
+                        type="button"
+                        onclick="imprimirCita({{ cita.id }})"
+                        class="inline-flex items-center px-3 py-1 border border-blue-500 text-blue-600 text-xs font-medium rounded-md hover:bg-blue-50 transition"
+                    >
+                       🖨️ Imprimir
+                    </button>
+
+                    <!-- Botón Eliminar -->
+                    <button
+                        type="button"
+                        onclick="eliminarCita({{ cita.id }})"
+                        class="inline-flex items-center px-3 py-1 border border-red-500 text-red-600 text-xs font-medium rounded-md hover:bg-red-50 transition"
+                    >
+                        🗑️ Eliminar
+                    </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-gray-500">No hay citas registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500 mt-4">No se encontró programación correspondiente</p>
+    {% endif %}
+</fieldset>
+<script>
+function imprimirCita(citaId) {
+    window.open(`/ticket/${citaId}/`, "_blank");
+  }
+
+function eliminarCita(citaId) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+        // Lógica para enviar una solicitud al backend para eliminar la cita
+        console.log(`Eliminar cita con ID: ${citaId}`);
+    }
+}
+</script>
+  {% include "detalle_cita.html" %}
