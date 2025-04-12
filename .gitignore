@@ -19,8 +19,11 @@ venv/
 env/
 ENV/
 
-# Static files
-staticfiles/
+# Static files generados por collectstatic
+/staticfiles/
 
+# Node modules
 node_modules/
-*.env
+
+# ⚠️ No ignores el output.css necesario para Tailwind
+!frontend/static/output.css
