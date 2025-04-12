@@ -1,29 +1,31 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.sqlite3
 
-# Django
+# Entorno Django
 *.log
 *.pot
 *.pyc
 *.pyo
 *.db
 .env
+*.env
 
 # VSCode
 .vscode/
 
-# Virtual environments
+# Entornos virtuales
 venv/
 env/
 ENV/
 
-# Static files generados por collectstatic
-/staticfiles/
+# Static files generados automáticamente
+staticfiles/
+frontend/staticfiles/
+**/staticfiles/
 
 # Node modules
 node_modules/
 
-# ⚠️ No ignores el output.css necesario para Tailwind
+# ⚠️ ¡No ignores el CSS generado por Tailwind!
 !frontend/static/output.css
