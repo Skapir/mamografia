@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-+(=+g3#%)w^gb8re0%hh2^r&*i9vlgoo9&d31vd(sm)07v@w4='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['mamografia-production.up.railway.app']
 CSRF_TRUSTED_ORIGINS = ['https://mamografia-production.up.railway.app']

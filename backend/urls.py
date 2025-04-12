@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 from django.contrib import admin
 from django.urls import path
 from backend.usuarios.views import login_view,dashboard_estadistico,reportes,logout_view
@@ -18,3 +22,5 @@ urlpatterns = [
     path("ticket/<int:cita_id>/", generar_ticket_pdf, name="generar_ticket_pdf"),
     
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
