@@ -21,6 +21,4 @@ urlpatterns = [
     path("registrar-cita/", registrar_cita, name="registrar_cita"),
     path("ticket/<int:cita_id>/", generar_ticket_pdf, name="generar_ticket_pdf"),
     
-]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
