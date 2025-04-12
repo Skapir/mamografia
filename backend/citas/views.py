@@ -12,7 +12,6 @@ from django.utils import timezone
 from django.db import transaction
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from weasyprint import HTML
 from django.urls import reverse
 from xhtml2pdf import pisa
 from io import BytesIO
