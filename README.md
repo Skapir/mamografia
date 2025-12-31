@@ -36,3 +36,9 @@ Este sistema fue desarrollado como solución para **mejorar la programación y a
 git clone https://github.com/Skapir/mamografia.git
 cd mamografia
 ```
+--- 
+## 👨‍💻 Autor 
+
+**Sergio Pérez (Skapir)** 
+
+📧 sperezn.dev@gmail.com
